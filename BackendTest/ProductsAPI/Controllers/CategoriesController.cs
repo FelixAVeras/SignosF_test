@@ -5,6 +5,8 @@ using ProductsAPI.Models.Data;
 
 namespace ProductsAPI.Controllers;
 
+[ApiController]
+[Route("api/[controller]")]
 public class CategoriesController : ControllerBase
 {
     private readonly DataContext _context;

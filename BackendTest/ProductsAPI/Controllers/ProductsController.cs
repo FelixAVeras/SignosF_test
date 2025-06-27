@@ -5,6 +5,8 @@ using ProductsAPI.Models.Data;
 
 namespace ProductsAPI.Controllers;
 
+[ApiController]
+[Route("api/[controller]")]
 public class ProductsController : ControllerBase
 {
     private readonly DataContext _context;
@@ -16,9 +18,19 @@ public class ProductsController : ControllerBase
 
     // GET: api/products
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
+    public async Task<ActionResult<IEnumerable<ProductDTO>>> GetProducts()
     {
-        return await _context.Products.Include(p => p.Category).ToListAsync();
+        var products = await _context.Products.Include(p => p.Category).Select(p => new ProductDTO
+        {
+            Id = p.Id,
+            Name = p.Name,
+            Description = p.Description,
+            Price = p.Price,
+            Stock = p.Stock,
+            CategoryName = p.Category!.Name
+        }).ToListAsync();
+
+    return Ok(products);
     }
 
     // GET: api/products/5
